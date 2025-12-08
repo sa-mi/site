@@ -6,50 +6,52 @@
   <title>Sami Halabieh</title>
   <link rel="icon" type="image/png" href="images/me.png">
   <style>
-    /* CSS Variables for easy color management */
-    :root {
+    /* 1. Global Reset */
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+    /* 2. Color Variables (Light Mode Default) */
+    .main-wrapper {
       --bg-color: #fafafa;
       --text-color: #333333;
-      --accent-color: #0056b3; 
+      --accent-color: #0056b3;
       --secondary-text: #666666;
       --border-color: #e0e0e0;
       --card-bg: #ffffff;
       --shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
-
-    /* Dark Mode Variables */
-    [data-theme="dark"] {
-      --bg-color: #2d2d2d; 
-      --text-color: #f5f5f5;
-      --accent-color: #64b5f6; 
-      --secondary-text: #bbbbbb;
-      --border-color: #404040;
-      --card-bg: #383838;
-      --shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-
-    /* Global Reset & Typography */
-    * { box-sizing: border-box; }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --icon-filter: none;
+      
+      /* Layout & Background for the whole page */
       background-color: var(--bg-color);
       color: var(--text-color);
-      transition: background-color 0.3s ease, color 0.3s ease;
-      line-height: 1.6;
-    }
-
-    /* Layout Container */
-    .container {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 60px 20px;
       min-height: 100vh;
+      width: 100%;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: flex;
+      justify-content: center; /* Centers the inner content */
     }
 
-    /* Header Styling */
+    /* 3. Dark Mode Overrides */
+    /* This selects the wrapper when the checkbox ABOVE it is checked */
+    #toggle:checked ~ .main-wrapper {
+      --bg-color: #2d2d2d;
+      --text-color: #f5f5f5;
+      --accent-color: #64b5f6;
+      --secondary-text: #cccccc;
+      --border-color: #444444;
+      --card-bg: #383838;
+      --shadow: 0 4px 6px rgba(0,0,0,0.3);
+      --icon-filter: invert(1);
+    }
+
+    /* 4. Content Container (The middle column) */
+    .content-container {
+      width: 100%;
+      max-width: 700px;
+      padding: 60px 20px;
+    }
+
+    /* 5. Header & Icons */
     header {
       display: flex;
       justify-content: space-between;
@@ -59,55 +61,33 @@
       border-bottom: 1px solid var(--border-color);
     }
 
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+    h1 { margin: 0; font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
 
-    /* Icon Controls */
-    .header-icons {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
+    .header-icons { display: flex; align-items: center; gap: 15px; }
+    
     .header-icons a img {
-      width: 24px;
-      height: 24px;
+      width: 24px; height: 24px;
       opacity: 0.8;
       transition: opacity 0.2s;
-      /* Invert icons in dark mode if they are black SVGs */
-      filter: var(--icon-filter, none);
+      filter: var(--icon-filter);
     }
+    .header-icons a:hover img { opacity: 1; }
 
-    .header-icons a:hover img {
-      opacity: 1;
-    }
-
-    /* Dark Mode Toggle Styling */
-    #toggle { display: none; } /* Hide the actual checkbox */
-    
-    label.toggle {
-      cursor: pointer;
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      transition: transform 0.2s;
-    }
-    
+    /* Toggle Button Styling */
+    #toggle { display: none; }
+    label.toggle { cursor: pointer; font-size: 22px; user-select: none; transition: transform 0.2s; }
     label.toggle:hover { transform: scale(1.1); }
     
-    /* Logic to switch icons based on checkbox state */
+    /* Icon Switching Logic */
     .icon-moon { display: block; }
     .icon-sun { display: none; }
-
-    /* Main Content Styling */
-    p { margin-bottom: 1.5rem; color: var(--text-color); }
     
+    #toggle:checked ~ .main-wrapper .icon-moon { display: none; }
+    #toggle:checked ~ .main-wrapper .icon-sun { display: block; }
+
+    /* 6. Main Content Elements */
+    p { line-height: 1.6; margin-bottom: 1.5rem; }
+
     .email-block {
       background-color: var(--card-bg);
       padding: 15px;
@@ -119,41 +99,20 @@
       color: var(--secondary-text);
       box-shadow: var(--shadow);
     }
+    .email-highlight { color: var(--accent-color); font-weight: bold; }
 
-    .email-highlight {
-      color: var(--accent-color);
-      font-weight: bold;
-    }
-
-    /* Image Styling */
     .showcase-img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 30px auto;
-      border-radius: 12px;
+      max-width: 100%; height: auto; display: block;
+      margin: 30px auto; border-radius: 12px;
       box-shadow: var(--shadow);
       transition: transform 0.3s;
     }
+    .showcase-img:hover { transform: scale(1.01); }
 
-    .showcase-img:hover {
-      transform: scale(1.01);
-    }
-
-    /* Course List Styling */
-    h3 { 
-      margin-top: 40px; 
-      font-weight: 600;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      margin-bottom: 15px;
-    }
+    /* 7. Course Links */
+    h3 { margin-top: 40px; font-weight: 600; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 15px; }
 
     a.course-link {
       color: var(--accent-color);
@@ -161,32 +120,14 @@
       font-weight: 500;
       transition: opacity 0.2s;
       display: inline-block;
-      padding: 8px 12px;
+      padding: 12px 15px;
       background: var(--card-bg);
       border-radius: 8px;
       border: 1px solid var(--border-color);
       width: 100%;
       box-shadow: var(--shadow);
     }
-
-    a.course-link:hover {
-      opacity: 0.8;
-      border-color: var(--accent-color);
-    }
-
-    #toggle:checked ~ .container {
-      --bg-color: #2d2d2d;
-      --text-color: #f5f5f5;
-      --accent-color: #64b5f6;
-      --secondary-text: #cccccc;
-      --border-color: #444444;
-      --card-bg: #383838;
-      --icon-filter: invert(1);
-    }
-
-    /* Toggle Icon Switch Logic */
-    #toggle:checked ~ .container .icon-moon { display: none; }
-    #toggle:checked ~ .container .icon-sun { display: block; }
+    a.course-link:hover { opacity: 0.8; border-color: var(--accent-color); }
 
   </style>
 </head>
@@ -194,65 +135,65 @@
 
   <input type="checkbox" id="toggle">
 
-  <div class="container">
-    <header>
-      <h1>Sami Halabieh</h1>
+  <div class="main-wrapper">
+    
+    <div class="content-container">
       
-      <div class="header-icons">
-        <label class="toggle" for="toggle" title="Toggle Dark Mode">
-          <span class="icon-moon">🌙</span>
-          <span class="icon-sun">☀️</span>
-        </label>
-        
-        <a href="https://github.com/sa-mi" target="_blank" title="GitHub">
-          <img src="images/github.svg" alt="GitHub">
-        </a>
-        
-        <a href="https://linkedin.com/in/samihalabieh" target="_blank" title="LinkedIn">
-          <img src="images/linkedin.svg" alt="LinkedIn">
-        </a>
+      <header>
+        <h1>Sami Halabieh</h1>
+        <div class="header-icons">
+          <label class="toggle" for="toggle">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+          </label>
+          
+          <a href="https://github.com/sa-mi" target="_blank">
+            <img src="images/github.svg" alt="GitHub">
+          </a>
+          
+          <a href="https://linkedin.com/in/samihalabieh" target="_blank">
+            <img src="images/linkedin.svg" alt="LinkedIn">
+          </a>
+        </div>
+      </header>
+
+      <div class="intro">
+        <div class="email-block">
+          <span class="email-highlight">sami</span> 
+          <i>(concatenated with the first three letters of sami)</i> 
+          <span class="email-highlight">at berkeley dot edu</span>
+        </div>
+
+        <p>
+          I am currently an undergraduate student at UC Berkeley.
+          In my free time, I like to go backpacking and play with my pet bunny bun-bun.
+        </p>
+
+        <img src="images/bunbun1.jpg" alt="Bun Bun the bunny" class="showcase-img" height="300">
       </div>
-    </header>
 
-    <div class="intro">
-      <div class="email-block">
-        <span class="email-highlight">sami</span> 
-        <i>(concatenated with the first three letters of sami)</i> 
-        <span class="email-highlight">at berkeley dot edu</span>
-      </div>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
 
-      <p>
-        I am currently an undergraduate student at UC Berkeley.
-        In my free time, I like to go backpacking and play with my pet bunny bun-bun (see below).
-      </p>
+      <section class="courses">
+        <h3>Courses</h3>
+        <ul>
+          <li>
+            <a href="https://github.com/sa-mi/cs198" class="course-link">
+              CS 198: Deep Learning at Berkeley (ML@B DeCal)
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/sa-mi/eecs126" class="course-link">
+              EECS 126: Probability and Random Processes
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/sa-mi/eecs127" class="course-link">
+               EECS 127/227A: Optimization Models in Engineering
+            </a>
+          </li>
+        </ul>
+      </section>
 
-      <img src="images/bunbun1.jpg" alt="Bun Bun the bunny" class="showcase-img" height="300">
-    </div>
-
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
-
-    <section class="courses">
-      <h3>Courses</h3>
-      <ul>
-        <li>
-          <a href="https://github.com/sa-mi/cs198" class="course-link">
-            CS 198: Deep Learning at Berkeley (ML@B DeCal)
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/sa-mi/eecs126" class="course-link">
-            EECS 126: Probability and Random Processes
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/sa-mi/eecs127" class="course-link">
-             EECS 127/227A: Optimization Models in Engineering
-          </a>
-        </li>
-      </ul>
-    </section>
-
-    </div>
-
-</body>
+      </div> </div> </body>
 </html>
