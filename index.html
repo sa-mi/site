@@ -1,139 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sami Halabieh</title>
   <link rel="icon" type="image/png" href="images/me.png">
   <style>
+    /* CSS Variables for easy color management */
+    :root {
+      --bg-color: #fafafa;
+      --text-color: #333333;
+      --accent-color: #0056b3; 
+      --secondary-text: #666666;
+      --border-color: #e0e0e0;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    /* Dark Mode Variables */
+    [data-theme="dark"] {
+      --bg-color: #2d2d2d; 
+      --text-color: #f5f5f5;
+      --accent-color: #64b5f6; 
+      --secondary-text: #bbbbbb;
+      --border-color: #404040;
+      --card-bg: #383838;
+      --shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Global Reset & Typography */
+    * { box-sizing: border-box; }
+    
     body {
       margin: 0;
       padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.6;
     }
-    .wrapper {
-      transition: background-color 0.3s, color 0.3s;
-      background-color: #ffffff;
-      color: #000000;
-      min-height: 100vh; 
-      padding: 20px;
+
+    /* Layout Container */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      min-height: 100vh;
     }
-    /* Dark mode styles applied to the whole wrapper */
-    #toggle:checked ~ .wrapper {
-      background-color: #2d2d2d;
-      color: #f5f5f5;
-    }
-    #toggle {
-      display: none;
-    }
-    /* Style for the dark mode toggle button */
-    label.toggle {
-      font-size: 30px; 
-      cursor: pointer;
-      user-select: none;
-      border: none;
-      background: none;
-      padding: 0;
-      vertical-align: middle;
-    }
-    .icon-moon {
-      display: inline;
-    }
-    .icon-sun {
-      display: none;
-    }
-    #toggle:checked ~ .wrapper label.toggle .icon-moon {
-      display: none;
-    }
-    #toggle:checked ~ .wrapper label.toggle .icon-sun {
-      display: inline;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    html, body {
-      overflow-x: hidden; 
-    }
-    img {
-      max-width: 100%; 
-      height: auto;    
-      display: block;
-      margin: 0 auto;  
-    }
-    @media (min-width: 768px) {
-      img {
-        max-width: 700px; 
-      }
-    }
-    .header-icons {
-      display: inline-flex;
+
+    /* Header Styling */
+    header {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      margin-left: 20px;
-      vertical-align: middle;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
     }
-    /* Ensure all icons are the same size */
-    .header-icons img {
-      width: 30px;
-      height: 30px;
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
+
+    /* Icon Controls */
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-icons a img {
+      width: 24px;
+      height: 24px;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      /* Invert icons in dark mode if they are black SVGs */
+      filter: var(--icon-filter, none);
+    }
+
+    .header-icons a:hover img {
+      opacity: 1;
+    }
+
+    /* Dark Mode Toggle Styling */
+    #toggle { display: none; } /* Hide the actual checkbox */
+    
+    label.toggle {
+      cursor: pointer;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+    
+    label.toggle:hover { transform: scale(1.1); }
+    
+    /* Logic to switch icons based on checkbox state */
+    .icon-moon { display: block; }
+    .icon-sun { display: none; }
+
+    /* Main Content Styling */
+    p { margin-bottom: 1.5rem; color: var(--text-color); }
+    
+    .email-block {
+      background-color: var(--card-bg);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      color: var(--secondary-text);
+      box-shadow: var(--shadow);
+    }
+
+    .email-highlight {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+
+    /* Image Styling */
+    .showcase-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 30px auto;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+
+    .showcase-img:hover {
+      transform: scale(1.01);
+    }
+
+    /* Course List Styling */
+    h3 { 
+      margin-top: 40px; 
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 15px;
+    }
+
+    a.course-link {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+      display: inline-block;
+      padding: 8px 12px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    a.course-link:hover {
+      opacity: 0.8;
+      border-color: var(--accent-color);
+    }
+
+    #toggle:checked ~ .container {
+      --bg-color: #2d2d2d;
+      --text-color: #f5f5f5;
+      --accent-color: #64b5f6;
+      --secondary-text: #cccccc;
+      --border-color: #444444;
+      --card-bg: #383838;
+      --icon-filter: invert(1);
+    }
+
+    /* Toggle Icon Switch Logic */
+    #toggle:checked ~ .container .icon-moon { display: none; }
+    #toggle:checked ~ .container .icon-sun { display: block; }
+
   </style>
 </head>
 <body>
-  <!-- Hidden checkbox to control dark mode -->
+
   <input type="checkbox" id="toggle">
-  <div class="wrapper">
-    <h1>
-      Sami Halabieh
-      <span class="header-icons">
-        <!-- Dark Mode Toggle using emojis -->
-        <label class="toggle" for="toggle">
+
+  <div class="container">
+    <header>
+      <h1>Sami Halabieh</h1>
+      
+      <div class="header-icons">
+        <label class="toggle" for="toggle" title="Toggle Dark Mode">
           <span class="icon-moon">🌙</span>
           <span class="icon-sun">☀️</span>
         </label>
-        <!-- GitHub Icon -->
-        <a href="https://github.com/sa-mi" title="GitHub">
+        
+        <a href="https://github.com/sa-mi" target="_blank" title="GitHub">
           <img src="images/github.svg" alt="GitHub">
         </a>
-        <!-- LinkedIn Icon -->
-        <a href="https://linkedin.com/in/samihalabieh" title="LinkedIn">
+        
+        <a href="https://linkedin.com/in/samihalabieh" target="_blank" title="LinkedIn">
           <img src="images/linkedin.svg" alt="LinkedIn">
         </a>
-      </span>
-    </h1>
-    <hr>
-    <p>
-      <b>sami</b>
-      <i>(concatenated with the first three letters of sami)</i>
-      <b>at berkeley dot edu</b>
-      <br><br>
-      I am currently an undergraduate student at uc berkeley.
-      In my free time, I like to go backpacking and play with my pet bunny bun-bun (see below).
-      
-      
-    </p>
-    <br>
-    <img src="images/bunbun1.jpg" alt="bunbun1" height="200">
-    <br>
-    <hr>
-    <h3>Courses:</h3>
-<ul>
-  <li>
-    <a href="https://github.com/sa-mi/cs198" style="color: blue; text-decoration: underline;">
-      CS 198: Deep Learning at Berkeley (ML@B DeCal)
-    </a>
-  </li>
-  <li>
-    <a href="https://github.com/sa-mi/eecs126" style="color: blue; text-decoration: underline;">
-      EECS 126: Probability and Random Processes
-    </a>
-  </li>
-  <li>
-    <a href="https://github.com/sa-mi/eecs127" style="color: blue; text-decoration: underline;">
-      EECS 127/227A: Optimization Models in Engineering
-    </a>
-  </li>
-</ul>
-    <!--stop looking-->
-  </div>
+      </div>
+    </header>
+
+    <div class="intro">
+      <div class="email-block">
+        <span class="email-highlight">sami</span> 
+        <i>(concatenated with the first three letters of sami)</i> 
+        <span class="email-highlight">at berkeley dot edu</span>
+      </div>
+
+      <p>
+        I am currently an undergraduate student at UC Berkeley.
+        In my free time, I like to go backpacking and play with my pet bunny bun-bun (see below).
+      </p>
+
+      <img src="images/bunbun1.jpg" alt="Bun Bun the bunny" class="showcase-img" height="300">
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
+
+    <section class="courses">
+      <h3>Courses</h3>
+      <ul>
+        <li>
+          <a href="https://github.com/sa-mi/cs198" class="course-link">
+            CS 198: Deep Learning at Berkeley (ML@B DeCal)
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/sa-mi/eecs126" class="course-link">
+            EECS 126: Probability and Random Processes
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/sa-mi/eecs127" class="course-link">
+             EECS 127/227A: Optimization Models in Engineering
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    </div>
+
 </body>
 </html>
