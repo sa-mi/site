@@ -396,11 +396,52 @@
       padding: clamp(22px, 4vw, 32px);
     }
 
+    .courses summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .courses summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .courses summary::after {
+      content: "";
+      width: 0.65em;
+      height: 0.65em;
+      border-right: 3px solid var(--accent-color);
+      border-bottom: 3px solid var(--accent-color);
+      transform: rotate(45deg);
+      transition: transform 0.2s ease;
+    }
+
+    .courses[open] summary {
+      margin-bottom: 18px;
+    }
+
+    .courses[open] summary::after {
+      transform: translateY(0.2em) rotate(225deg);
+    }
+
+    .courses summary:focus-visible {
+      border-radius: 12px;
+      outline: 3px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+      outline-offset: 6px;
+    }
+
     h3 {
       margin: 0 0 18px;
       font-size: clamp(1.15rem, 3vw, 1.6rem);
       font-weight: 800;
       letter-spacing: -0.03em;
+    }
+
+    .courses h3 {
+      margin: 0;
     }
 
     ul {
@@ -617,8 +658,10 @@
 
       <hr class="divider">
 
-      <section class="courses">
-        <h3>Courses</h3>
+      <details class="courses">
+        <summary>
+          <h3>Courses</h3>
+        </summary>
         <ul>
           <li>
             <a href="https://github.com/sa-mi/eecs126" class="course-link">
@@ -651,7 +694,7 @@
             </a>
           </li>
         </ul>
-      </section>
+      </details>
 
       <footer class="referral">
         <div class="referral-header" aria-hidden="true">
