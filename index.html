@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,16 +25,6 @@
       min-width: 320px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: #f6efe6;
-    }
-
-    #toggle {
-      position: absolute;
-      inline-size: 1px;
-      block-size: 1px;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-      white-space: nowrap;
     }
 
     .main-wrapper {
@@ -66,7 +56,7 @@
       transition: color 0.25s ease;
     }
 
-    #toggle:checked ~ .main-wrapper {
+    :root[data-theme="dark"] .main-wrapper {
       --ambient-bg:
         radial-gradient(circle at 20% 12%, rgba(95, 111, 255, 0.26), transparent 28rem),
         radial-gradient(circle at 80% 0%, rgba(98, 242, 197, 0.13), transparent 24rem),
@@ -85,13 +75,39 @@
       --icon-filter: invert(1);
     }
 
+    :root[data-theme="rainbow"] .main-wrapper {
+      --ambient-bg: hsla(0, 100%, 100%, 0.55);
+      --grid-color: rgba(255, 255, 255, 0.2);
+      --page-bg: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-strong: rgba(255, 255, 255, 0.88);
+      --text-color: #101626;
+      --secondary-text: #27324a;
+      --accent-color: #7b2cff;
+      --accent-warm: #ff4f7b;
+      --border-color: rgba(16, 22, 38, 0.18);
+      --shadow: 0 24px 80px rgba(96, 22, 141, 0.22);
+      --soft-shadow: 0 14px 36px rgba(96, 22, 141, 0.14);
+      --icon-filter: none;
+    }
+
     .main-wrapper::before {
       content: "";
       position: fixed;
       inset: 0;
       z-index: -2;
       background: var(--ambient-bg);
+      background-size: 140% 140%;
       transition: background 0.25s ease;
+    }
+
+    :root[data-theme="rainbow"] .main-wrapper::before {
+      animation: rainbow-drift 0.11s linear infinite;
+    }
+
+    @keyframes rainbow-drift {
+      from { filter: hue-rotate(0deg) saturate(1.3); }
+      to   { filter: hue-rotate(360deg) saturate(1.3); }
     }
 
     .main-wrapper::after {
@@ -109,6 +125,34 @@
       mask-image: linear-gradient(to bottom, black, transparent 85%);
     }
 
+    :root[data-theme="rainbow"] .main-wrapper::after {
+      inset: auto;
+      width: 400vmax;
+      height: 400vmax;
+      top: 50%;
+      left: 50%;
+      background-image: conic-gradient(
+        from 0deg at 50% 50%,
+        hsla(0,   100%, 65%, 0.55),
+        hsla(60,  100%, 65%, 0.55),
+        hsla(120, 100%, 65%, 0.55),
+        hsla(180, 100%, 65%, 0.55),
+        hsla(240, 100%, 65%, 0.55),
+        hsla(300, 100%, 65%, 0.55),
+        hsla(360, 100%, 65%, 0.55)
+      );
+      background-size: 100% 100%;
+      opacity: 0.75;
+      -webkit-mask-image: none;
+      mask-image: none;
+      animation: swirl-spin 1.2s linear infinite;
+    }
+
+    @keyframes swirl-spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
     .content-container {
       width: 100%;
       max-width: 1040px;
@@ -122,6 +166,18 @@
       box-shadow: var(--shadow);
       -webkit-backdrop-filter: blur(24px);
       backdrop-filter: blur(24px);
+    }
+
+    :root[data-theme="rainbow"] .content-container {
+      animation: psychedelic-wobble 2.5s ease-in-out infinite;
+    }
+
+    @keyframes psychedelic-wobble {
+      0%   { filter: hue-rotate(0deg)   saturate(1.1); transform: scale(1)     rotate(0deg); }
+      25%  { filter: hue-rotate(90deg)  saturate(1.4); transform: scale(1.008) rotate(2deg); }
+      50%  { filter: hue-rotate(180deg) saturate(1.2); transform: scale(1.012) rotate(0deg); }
+      75%  { filter: hue-rotate(270deg) saturate(1.4); transform: scale(1.008) rotate(-2deg); }
+      100% { filter: hue-rotate(360deg) saturate(1.1); transform: scale(1)     rotate(0deg); }
     }
 
     header {
@@ -154,11 +210,12 @@
     }
 
     .header-icons a,
-    label.toggle {
+    .toggle {
       display: grid;
       place-items: center;
       width: 42px;
       height: 42px;
+      border: 0;
       border-radius: 50%;
       color: inherit;
       background: transparent;
@@ -166,14 +223,13 @@
     }
 
     .header-icons a:hover,
-    label.toggle:hover {
+    .toggle:hover {
       transform: translateY(-2px);
       background: var(--card-strong);
     }
 
     .header-icons a:focus-visible,
-    #toggle:focus-visible ~ .main-wrapper label.toggle,
-    label.toggle:focus-visible {
+    .toggle:focus-visible {
       outline: 3px solid color-mix(in srgb, var(--accent-color), transparent 55%);
       outline-offset: 3px;
     }
@@ -184,25 +240,30 @@
       filter: var(--icon-filter);
     }
 
-    label.toggle {
+    .toggle {
       cursor: pointer;
       font-size: 1.25rem;
       user-select: none;
     }
 
+    .icon-light,
     .icon-moon {
+      display: none;
+    }
+
+    .icon-rainbow {
+      display: none;
+    }
+
+    :root[data-theme="light"] .icon-light {
       display: block;
     }
 
-    .icon-sun {
-      display: none;
+    :root[data-theme="dark"] .icon-moon {
+      display: block;
     }
 
-    #toggle:checked ~ .main-wrapper .icon-moon {
-      display: none;
-    }
-
-    #toggle:checked ~ .main-wrapper .icon-sun {
+    :root[data-theme="rainbow"] .icon-rainbow {
       display: block;
     }
 
@@ -245,14 +306,14 @@
       text-decoration-thickness: 0.22em;
     }
 
-    #toggle:checked ~ .main-wrapper .berkeley {
+    :root[data-theme="dark"] .main-wrapper .berkeley {
       color: #8ab6ff;
       text-decoration-color: #fdb515;
       text-shadow: 0 0 18px rgba(138, 182, 255, 0.34);
     }
 
-    #toggle:checked ~ .main-wrapper .berkeley:hover,
-    #toggle:checked ~ .main-wrapper .berkeley:focus-visible {
+    :root[data-theme="dark"] .main-wrapper .berkeley:hover,
+    :root[data-theme="dark"] .main-wrapper .berkeley:focus-visible {
       color: #fdb515;
       text-decoration-color: #8ab6ff;
     }
@@ -461,24 +522,6 @@
       text-decoration-color: var(--accent-color);
     }
 
-    .affiliate-banner {
-      margin-top: 20px;
-      padding: 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      background: var(--card-bg);
-      text-align: center;
-      box-shadow: var(--soft-shadow);
-    }
-
-    .affiliate-banner img {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto;
-      border: 0;
-      border-radius: 12px;
-    }
 
     @media (max-width: 760px) {
       .main-wrapper {
@@ -522,21 +565,26 @@
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
       }
+
+      :root[data-theme="rainbow"] .main-wrapper::before,
+      :root[data-theme="rainbow"] .main-wrapper::after,
+      :root[data-theme="rainbow"] .content-container {
+        animation: none;
+      }
     }
   </style>
 </head>
 <body>
-  <input type="checkbox" id="toggle">
-
   <div class="main-wrapper">
     <div class="content-container">
       <header>
         <h1>Sami Halabieh</h1>
         <div class="header-icons">
-          <label class="toggle" for="toggle" aria-label="Toggle color theme" role="switch" aria-checked="false" tabindex="0">
+          <button class="toggle" type="button" aria-label="Switch color theme" title="Switch color theme">
+            <span class="icon-light">☀️</span>
             <span class="icon-moon">🌙</span>
-            <span class="icon-sun">☀️</span>
-          </label>
+            <span class="icon-rainbow">🪩</span>
+          </button>
 
           <a href="https://github.com/sa-mi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <img src="images/github.svg" alt="GitHub">
@@ -620,36 +668,33 @@
         </p>
       </footer>
 
-      <div class="affiliate-banner">
-        <a href="https://coinserom.com/?affiliate=3537373730" target="_blank" rel="sponsored noopener noreferrer">
-          <img src="https://cdn.coinserom.com/files/images/publish.gif" alt="Sponsored affiliate banner" loading="lazy">
-        </a>
-      </div>
-
     </div>
   </div>
   <script>
-    const toggle = document.querySelector("#toggle");
-    const toggleLabel = document.querySelector("label.toggle");
+    const themes = ["light", "dark", "rainbow"];
+    const toggle = document.querySelector(".toggle");
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    toggle.checked = savedTheme ? savedTheme === "dark" : prefersDark;
-    toggleLabel.setAttribute("aria-checked", String(toggle.checked));
+    const initialTheme = themes.includes(savedTheme)
+      ? savedTheme
+      : prefersDark
+        ? "dark"
+        : "light";
 
-    toggle.addEventListener("change", () => {
-      localStorage.setItem("theme", toggle.checked ? "dark" : "light");
-      toggleLabel.setAttribute("aria-checked", String(toggle.checked));
-    });
+    const setTheme = (theme) => {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem("theme", theme);
+      toggle.setAttribute("aria-label", `Switch color theme. Current theme: ${theme}`);
+      toggle.setAttribute("title", `Current theme: ${theme}`);
+    };
 
-    toggleLabel.addEventListener("keydown", (event) => {
-      if (event.key !== " " && event.key !== "Enter") {
-        return;
-      }
+    setTheme(initialTheme);
 
-      event.preventDefault();
-      toggle.checked = !toggle.checked;
-      toggle.dispatchEvent(new Event("change"));
+    toggle.addEventListener("click", () => {
+      const currentIndex = themes.indexOf(document.documentElement.dataset.theme);
+      const nextTheme = themes[(currentIndex + 1) % themes.length];
+      setTheme(nextTheme);
     });
   </script>
 </body>
