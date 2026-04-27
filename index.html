@@ -6,173 +6,547 @@
   <title>Sami Halabieh</title>
   <link rel="icon" type="image/png" href="images/me.png">
   <style>
-    /* 1. Global Reset */
-    * { box-sizing: border-box; }
-    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-    /* 2. Color Variables (Light Mode Default) */
+    :root {
+      color-scheme: light dark;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f6efe6;
+    }
+
+    #toggle {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
     .main-wrapper {
-      --bg-color: #fafafa;
-      --text-color: #333333;
-      --accent-color: #0056b3;
-      --secondary-text: #666666;
-      --border-color: #e0e0e0;
-      --card-bg: #ffffff;
-      --shadow: 0 4px 6px rgba(0,0,0,0.05);
+      --ambient-bg:
+        radial-gradient(circle at 12% 14%, rgba(77, 118, 255, 0.18), transparent 30rem),
+        radial-gradient(circle at 84% 8%, rgba(255, 130, 82, 0.2), transparent 28rem),
+        linear-gradient(135deg, #fff8ef 0%, #eef4ff 48%, #fff4ea 100%);
+      --grid-color: rgba(20, 28, 45, 0.075);
+      --page-bg: rgba(255, 255, 255, 0.72);
+      --card-bg: rgba(255, 255, 255, 0.78);
+      --card-strong: rgba(255, 255, 255, 0.95);
+      --text-color: #172033;
+      --secondary-text: #536071;
+      --accent-color: #315efb;
+      --accent-warm: #e86835;
+      --border-color: rgba(23, 32, 51, 0.12);
+      --shadow: 0 24px 80px rgba(23, 32, 51, 0.13);
+      --soft-shadow: 0 14px 36px rgba(23, 32, 51, 0.1);
       --icon-filter: none;
-      
-      /* Layout & Background for the whole page */
-      background-color: var(--bg-color);
+
+      position: relative;
+      isolation: isolate;
       color: var(--text-color);
       min-height: 100vh;
       width: 100%;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      padding: 36px 18px;
       display: flex;
-      justify-content: center; /* Centers the inner content */
+      justify-content: center;
+      transition: color 0.25s ease;
     }
 
-    /* 3. Dark Mode Overrides */
-    /* This selects the wrapper when the checkbox ABOVE it is checked */
     #toggle:checked ~ .main-wrapper {
-      --bg-color: #2d2d2d;
-      --text-color: #f5f5f5;
-      --accent-color: #64b5f6;
-      --secondary-text: #cccccc;
-      --border-color: #444444;
-      --card-bg: #383838;
-      --shadow: 0 4px 6px rgba(0,0,0,0.3);
+      --ambient-bg:
+        radial-gradient(circle at 20% 12%, rgba(95, 111, 255, 0.26), transparent 28rem),
+        radial-gradient(circle at 80% 0%, rgba(98, 242, 197, 0.13), transparent 24rem),
+        linear-gradient(135deg, #050816 0%, #0b1020 50%, #12101f 100%);
+      --grid-color: rgba(255, 255, 255, 0.055);
+      --page-bg: rgba(14, 18, 30, 0.7);
+      --card-bg: rgba(25, 31, 49, 0.76);
+      --card-strong: rgba(31, 39, 60, 0.92);
+      --text-color: #f5f7fb;
+      --secondary-text: #b8c0d6;
+      --accent-color: #8fb3ff;
+      --accent-warm: #ffb088;
+      --border-color: rgba(245, 247, 251, 0.14);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      --soft-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
       --icon-filter: invert(1);
     }
 
-    /* 4. Content Container (The middle column) */
-    .content-container {
-      width: 100%;
-      max-width: 700px;
-      padding: 60px 20px;
+    .main-wrapper::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: var(--ambient-bg);
+      transition: background 0.25s ease;
     }
 
-    /* 5. Header & Icons */
+    .main-wrapper::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.55;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 52px 52px;
+      -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+
+    .content-container {
+      width: 100%;
+      max-width: 1040px;
+      padding: clamp(20px, 5vw, 58px);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent),
+        var(--page-bg);
+      box-shadow: var(--shadow);
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+    }
+
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 40px;
-      padding-bottom: 20px;
+      gap: 24px;
+      margin-bottom: clamp(34px, 6vw, 64px);
+      padding-bottom: 22px;
       border-bottom: 1px solid var(--border-color);
     }
 
-    h1 { margin: 0; font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 7vw, 5.8rem);
+      line-height: 0.96;
+      font-weight: 680;
+      letter-spacing: -0.065em;
+    }
 
-    .header-icons { display: flex; align-items: center; gap: 15px; }
-    
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: var(--card-bg);
+      box-shadow: 0 12px 28px rgba(23, 32, 51, 0.08);
+    }
+
+    .header-icons a,
+    label.toggle {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: inherit;
+      background: transparent;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .header-icons a:hover,
+    label.toggle:hover {
+      transform: translateY(-2px);
+      background: var(--card-strong);
+    }
+
+    .header-icons a:focus-visible,
+    #toggle:focus-visible ~ .main-wrapper label.toggle,
+    label.toggle:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+      outline-offset: 3px;
+    }
+
     .header-icons a img {
-      width: 24px; height: 24px;
-      opacity: 0.8;
-      transition: opacity 0.2s;
+      width: 23px;
+      height: 23px;
       filter: var(--icon-filter);
     }
-    .header-icons a:hover img { opacity: 1; }
 
-    /* Toggle Button Styling */
-    #toggle { display: none; }
-    label.toggle { cursor: pointer; font-size: 22px; user-select: none; transition: transform 0.2s; }
-    label.toggle:hover { transform: scale(1.1); }
-    
-    /* Icon Switching Logic */
-    .icon-moon { display: block; }
-    .icon-sun { display: none; }
-    
-    #toggle:checked ~ .main-wrapper .icon-moon { display: none; }
-    #toggle:checked ~ .main-wrapper .icon-sun { display: block; }
+    label.toggle {
+      cursor: pointer;
+      font-size: 1.25rem;
+      user-select: none;
+    }
 
-    /* 6. Main Content Elements */
-    p { line-height: 1.6; margin-bottom: 1.5rem; }
+    .icon-moon {
+      display: block;
+    }
+
+    .icon-sun {
+      display: none;
+    }
+
+    #toggle:checked ~ .main-wrapper .icon-moon {
+      display: none;
+    }
+
+    #toggle:checked ~ .main-wrapper .icon-sun {
+      display: block;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+      gap: clamp(28px, 5vw, 64px);
+      align-items: center;
+    }
+
+    .intro {
+      display: grid;
+      gap: 22px;
+    }
+
+    p {
+      margin: 0;
+      max-width: 60ch;
+      color: var(--secondary-text);
+      font-size: clamp(1.05rem, 2vw, 1.22rem);
+      line-height: 1.75;
+    }
+
+    .berkeley {
+      color: #003262;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-decoration: underline;
+      text-decoration-color: #fdb515;
+      text-decoration-thickness: 0.16em;
+      text-underline-offset: 0.18em;
+      transition: color 0.2s ease, text-decoration-thickness 0.2s ease;
+    }
+
+    .berkeley:hover,
+    .berkeley:focus-visible {
+      color: #fdb515;
+      text-decoration-color: #003262;
+      text-decoration-thickness: 0.22em;
+    }
+
+    #toggle:checked ~ .main-wrapper .berkeley {
+      color: #8ab6ff;
+      text-decoration-color: #fdb515;
+      text-shadow: 0 0 18px rgba(138, 182, 255, 0.34);
+    }
+
+    #toggle:checked ~ .main-wrapper .berkeley:hover,
+    #toggle:checked ~ .main-wrapper .berkeley:focus-visible {
+      color: #fdb515;
+      text-decoration-color: #8ab6ff;
+    }
+
+    .email-block,
+    .courses {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      box-shadow: var(--soft-shadow);
+    }
 
     .email-block {
-      background-color: var(--card-bg);
-      padding: 15px;
-      border-radius: 8px;
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
+      padding: 16px 18px;
+      overflow: hidden;
       font-family: monospace;
-      font-size: 0.95rem;
-      border: 1px solid var(--border-color);
-      margin-bottom: 2rem;
+      font-size: clamp(0.92rem, 2vw, 1rem);
       color: var(--secondary-text);
-      box-shadow: var(--shadow);
     }
-    .email-highlight { color: var(--accent-color); font-weight: bold; }
+
+    .email-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 5px;
+      background: linear-gradient(var(--accent-color), var(--accent-warm));
+    }
+
+    .email-highlight {
+      color: var(--accent-color);
+      font-weight: 800;
+    }
+
+    .portrait-card {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .portrait-card::before {
+      content: "";
+      position: absolute;
+      inset: 9% -7% -7% 12%;
+      z-index: -1;
+      border-radius: 32px;
+      background: linear-gradient(135deg, var(--accent-color), var(--accent-warm));
+      opacity: 0.42;
+      filter: blur(8px);
+      transform: rotate(5deg);
+    }
 
     .showcase-img {
-      max-width: 100%; height: auto; display: block;
-      margin: 30px auto; border-radius: 12px;
+      display: block;
+      width: 100%;
+      max-height: 560px;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
       box-shadow: var(--shadow);
-      transition: transform 0.3s;
+      transform: rotate(-1.5deg);
+      transition: transform 0.25s ease;
     }
-    .showcase-img:hover { transform: scale(1.01); }
 
-    /* 7. Course Links */
-    h3 { margin-top: 40px; font-weight: 600; }
-    ul { list-style: none; padding: 0; }
-    li { margin-bottom: 15px; }
+    .showcase-img:hover {
+      transform: rotate(0deg) scale(1.015);
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      margin: clamp(34px, 6vw, 64px) 0;
+      border: 0;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+    }
+
+    .courses {
+      padding: clamp(22px, 4vw, 32px);
+    }
+
+    h3 {
+      margin: 0 0 18px;
+      font-size: clamp(1.15rem, 3vw, 1.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    a {
+      color: inherit;
+    }
 
     a.course-link {
+      position: relative;
+      display: flex;
+      min-height: 92px;
+      height: 100%;
+      align-items: flex-end;
+      padding: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--accent-color), transparent 86%), transparent),
+        var(--card-strong);
       color: var(--accent-color);
       text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-      display: inline-block;
-      padding: 12px 15px;
-      background: var(--card-bg);
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      width: 100%;
-      box-shadow: var(--shadow);
+      font-weight: 750;
+      line-height: 1.35;
+      box-shadow: 0 10px 26px rgba(23, 32, 51, 0.06);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    a.course-link:hover { opacity: 0.8; border-color: var(--accent-color); }
 
+    a.course-link::after {
+      content: "↗";
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      color: var(--secondary-text);
+      font-size: 0.9rem;
+      opacity: 0.65;
+    }
+
+    a.course-link:hover,
+    a.course-link:focus-visible {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent-color), transparent 35%);
+      box-shadow: 0 16px 36px rgba(23, 32, 51, 0.12);
+    }
+
+    a.course-link:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+      outline-offset: 3px;
+    }
+
+    .referral {
+      margin-top: clamp(28px, 5vw, 48px);
+      padding: 18px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--accent-warm), transparent 86%), transparent),
+        var(--card-bg);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .referral-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .prizepicks-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: #8000ff;
+      box-shadow: 0 12px 24px rgba(128, 0, 255, 0.24);
+    }
+
+    .prizepicks-mark img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .prizepicks-wordmark {
+      color: var(--text-color);
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .referral p {
+      max-width: none;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .referral a {
+      color: var(--accent-color);
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-color: var(--accent-warm);
+      text-decoration-thickness: 0.14em;
+      text-underline-offset: 0.18em;
+    }
+
+    .referral a:hover,
+    .referral a:focus-visible {
+      color: var(--accent-warm);
+      text-decoration-color: var(--accent-color);
+    }
+
+    @media (max-width: 760px) {
+      .main-wrapper {
+        padding: 12px;
+      }
+
+      .content-container {
+        border-radius: 24px;
+      }
+
+      header,
+      main {
+        align-items: flex-start;
+      }
+
+      header {
+        flex-direction: column;
+      }
+
+      main,
+      ul {
+        grid-template-columns: 1fr;
+      }
+
+      .header-icons {
+        align-self: stretch;
+        justify-content: space-between;
+      }
+
+      .showcase-img {
+        max-height: 420px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
   </style>
 </head>
 <body>
-
   <input type="checkbox" id="toggle">
 
   <div class="main-wrapper">
-    
     <div class="content-container">
-      
       <header>
         <h1>Sami Halabieh</h1>
         <div class="header-icons">
-          <label class="toggle" for="toggle">
+          <label class="toggle" for="toggle" aria-label="Toggle color theme" role="switch" aria-checked="false" tabindex="0">
             <span class="icon-moon">🌙</span>
             <span class="icon-sun">☀️</span>
           </label>
-          
-          <a href="https://github.com/sa-mi" target="_blank">
+
+          <a href="https://github.com/sa-mi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <img src="images/github.svg" alt="GitHub">
           </a>
-          
-          <a href="https://linkedin.com/in/samihalabieh" target="_blank">
+
+          <a href="https://linkedin.com/in/samihalabieh" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <img src="images/linkedin.svg" alt="LinkedIn">
           </a>
         </div>
       </header>
 
-      <div class="intro">
-        <div class="email-block">
-          <span class="email-highlight">sami</span> 
-          <i>(concatenated with the first three letters of sami)</i> 
-          <span class="email-highlight">at berkeley dot edu</span>
+      <main>
+        <div class="intro">
+          <div class="email-block">
+            <span class="email-highlight">sami</span>
+            <i>(concatenated with the first three letters of sami)</i>
+            <span class="email-highlight">at berkeley dot edu</span>
+          </div>
+
+          <p>
+            I am currently an undergraduate student at <a href="https://cdss.berkeley.edu/" class="berkeley" target="_blank" rel="noopener noreferrer">UC Berkeley</a>.
+            In my free time, I like to go backpacking and play with my pet bunny bun-bun.
+          </p>
         </div>
 
-        <p>
-          I am currently an undergraduate student at UC Berkeley.
-          In my free time, I like to go backpacking and play with my pet bunny bun-bun.
-        </p>
+        <div class="portrait-card">
+          <img src="images/sami.jpg" alt="me in istanbul" class="showcase-img" height="300">
+        </div>
+      </main>
 
-        <img src="images/sami.jpg" alt="me in istanbul" class="showcase-img" height="300">
-      </div>
-
-      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 40px 0;">
+      <hr class="divider">
 
       <section class="courses">
         <h3>Courses</h3>
@@ -197,8 +571,59 @@
               CS 198: Deep Learning at Berkeley (ML@B DeCal)
             </a>
           </li>
+          <li>
+            <a href="https://github.com/sa-mi/cs170" class="course-link">
+              CS 170: Efficient Algorithms and Intractable Problems
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/sa-mi/cs189" class="course-link">
+              CS 189: Machine Learning
+            </a>
+          </li>
         </ul>
       </section>
 
-      </div> </div> </body>
+      <footer class="referral">
+        <div class="referral-header" aria-hidden="true">
+          <span class="prizepicks-mark">
+            <img src="images/prizepicks.svg" alt="">
+          </span>
+          <span>
+            <span class="prizepicks-wordmark">PrizePicks</span>
+          </span>
+        </div>
+        <p>
+          Check out PrizePicks - Daily Fantasy Made Easy. Use this link to get $50 in lineups after playing your first lineup!
+          <a href="https://prizepicks.onelink.me/FjtC/nzfxj0x9" target="_blank" rel="noopener noreferrer">PrizePicks</a>
+        </p>
+      </footer>
+
+    </div>
+  </div>
+  <script>
+    const toggle = document.querySelector("#toggle");
+    const toggleLabel = document.querySelector("label.toggle");
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    toggle.checked = savedTheme ? savedTheme === "dark" : prefersDark;
+    toggleLabel.setAttribute("aria-checked", String(toggle.checked));
+
+    toggle.addEventListener("change", () => {
+      localStorage.setItem("theme", toggle.checked ? "dark" : "light");
+      toggleLabel.setAttribute("aria-checked", String(toggle.checked));
+    });
+
+    toggleLabel.addEventListener("keydown", (event) => {
+      if (event.key !== " " && event.key !== "Enter") {
+        return;
+      }
+
+      event.preventDefault();
+      toggle.checked = !toggle.checked;
+      toggle.dispatchEvent(new Event("change"));
+    });
+  </script>
+</body>
 </html>
