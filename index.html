@@ -331,7 +331,7 @@
     }
 
     .email-block,
-    .courses {
+    :is(.courses, .projects) {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 24px;
@@ -404,11 +404,11 @@
       background: linear-gradient(90deg, transparent, var(--border-color), transparent);
     }
 
-    .courses {
+    :is(.courses, .projects) {
       padding: clamp(22px, 4vw, 32px);
     }
 
-    .courses summary {
+    :is(.courses, .projects) summary {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -418,11 +418,11 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .courses summary::-webkit-details-marker {
+    :is(.courses, .projects) summary::-webkit-details-marker {
       display: none;
     }
 
-    .courses summary::after {
+    :is(.courses, .projects) summary::after {
       content: "";
       width: 0.65em;
       height: 0.65em;
@@ -432,22 +432,26 @@
       transition: transform 0.2s ease;
     }
 
-    .courses[open] summary {
+    :is(.courses, .projects)[open] summary {
       margin-bottom: 18px;
     }
 
-    .courses[open] summary::after {
+    :is(.courses, .projects)[open] summary::after {
       transform: translateY(0.2em) rotate(225deg);
     }
 
-    .courses summary:focus {
+    :is(.courses, .projects) summary:focus {
       outline: none;
     }
 
-    .courses summary:focus-visible {
+    :is(.courses, .projects) summary:focus-visible {
       border-radius: 12px;
       outline: 3px solid color-mix(in srgb, var(--accent-color), transparent 55%);
       outline-offset: 6px;
+    }
+
+    .projects {
+      margin-top: 16px;
     }
 
     h3 {
@@ -457,7 +461,7 @@
       letter-spacing: -0.03em;
     }
 
-    .courses h3 {
+    :is(.courses, .projects) h3 {
       margin: 0;
     }
 
@@ -708,6 +712,19 @@
           <li>
             <a href="https://github.com/sa-mi/cs189" class="course-link">
               CS 189: Machine Learning
+            </a>
+          </li>
+        </ul>
+      </details>
+
+      <details class="projects">
+        <summary>
+          <h3>Projects</h3>
+        </summary>
+        <ul>
+          <li>
+            <a href="competitive-programming-with-qwen.pdf" class="course-link">
+              Training a 9B model to solve competitive programming problems (PDF)
             </a>
           </li>
         </ul>
